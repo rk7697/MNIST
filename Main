@@ -1,0 +1,204 @@
+import math
+import torch
+import time
+import torch.nn as nn
+import idx2numpy
+from torchvision import transforms
+import matplotlib.pyplot as plt
+
+#load the images 
+
+images = idx2numpy.convert_from_file('/Users/rk/desktop/archive/train-images.idx3-ubyte')
+labels = idx2numpy.convert_from_file('/Users/rk/desktop/archive/train-labels.idx1-ubyte')
+
+
+# print(labels.size)
+# print(images.size)
+# for i in range(5):
+#     image=images[i]
+import numpy
+# print(images[4].flatten())
+# print(images[4].shape)
+
+inputLayer=nn.Linear(784,200)
+hiddenLayer=nn.Linear(200,10)
+print(inputLayer.weight.size)
+print(inputLayer.bias.size)
+
+
+
+optimizer=torch.optim.SGD([inputLayer.weight,inputLayer.bias,hiddenLayer.weight,hiddenLayer.bias],lr=.01)
+images=images.astype(numpy.float32)/255.0
+# sampleimage=images[0].flatten()
+# print(sampleimage)
+
+
+#run the training loop
+
+for b in range (5):
+    error=0
+    for i in range(b*10000,b*10000+10000):
+        startimage=images[i]
+        label=torch.tensor(labels[i])
+        testimage=startimage.flatten()
+        optimizer.zero_grad()
+
+        # print(testimage.shape)
+        # print(testimage)
+
+
+        testimageTensor= torch.tensor(testimage)
+        testimageTensor=testimageTensor.to(torch.float32)
+        # print("image:{}".format(testimageTensor))
+    
+
+        intermediateOutput=inputLayer(testimageTensor)
+        intermediateOutput=torch.relu(intermediateOutput)
+        #    print("Intermediate output: {}".format(intermediateOutput))
+
+        finalOutput=hiddenLayer(intermediateOutput)
+
+        outputsToPrint=finalOutput.detach().numpy()
+        numpy.set_printoptions(suppress=True)
+        # print("final output: {}".format(outputsToPrint))
+        print(finalOutput.shape)
+        loss = nn.functional.cross_entropy(finalOutput,label)
+        error+=loss
+        loss.backward()
+        optimizer.step()
+        # print("loss:{}".format(loss))
+        maxvalue,maxindex=torch.max(finalOutput,dim=0)
+        # print("label: {}".format(labels[i]))
+
+        # print(" guessing:{}".format(maxindex.item()))
+        # print(maxindex.item())
+        # plt.imshow(startimage,cmap='gray')
+        # plt.axis('off')
+        # plt.show()
+    error=error/10000
+    print("average error: {}".format(error))
+
+print("Input layer: weights{}".format(inputLayer.weight))
+print("Input layer: biases{}".format(inputLayer.bias))
+print("Hidden layer: weights{}".format(hiddenLayer.weight))
+print("Hidden layer: biases{}".format(hiddenLayer.bias))
+
+images = idx2numpy.convert_from_file('/Users/rk/desktop/archive/t10k-images.idx3-ubyte')
+labels = idx2numpy.convert_from_file('/Users/rk/desktop/archive/t10k-labels.idx1-ubyte')
+error=0
+
+from PIL import Image
+image_path = '/Users/rileyknutson/desktop/thing.png'
+image = Image.open(image_path)
+image = image.resize((28, 28), Image.BILINEAR)
+image=image.convert('L')
+pixel_data = list(image.getdata())
+# print(pixel_data)
+# for i in range(len(pixel_data)):
+#     pixel_data[i]=pixel_data[i]*(-1)+255
+# print(pixel_data)
+
+
+startimage=pixel_data
+    # optimizer.zero_grad()
+
+    # print(testimage.shape)
+    # print(testimage)
+
+
+testimageTensor= torch.tensor(startimage)
+testimageTensor=testimageTensor.to(torch.float32)
+        
+    
+
+intermediateOutput=inputLayer(testimageTensor)
+intermediateOutput=torch.relu(intermediateOutput)
+        #    print("Intermediate output: {}".format(intermediateOutput))
+
+finalOutput=hiddenLayer(intermediateOutput)
+
+outputsToPrint=finalOutput.detach().numpy()
+numpy.set_printoptions(suppress=True)
+# print("final output: {}".format(outputsToPrint))
+
+    # loss = nn.functional.cross_entropy(finalOutput,label)
+    # error+=loss
+    # loss.backward()
+    # optimizer.step()
+    # print("loss:{}".format(loss))
+maxvalue,maxindex=torch.max(finalOutput,dim=0)
+print("guessing:{}".format(maxindex.item()))
+
+
+
+# Check some sample images
+
+# for i in range (100):
+    
+#     startimage=images[i]
+    
+#     print("label: {}".format(labels[i]))
+#     label=torch.tensor(labels[i])
+#     testimage=startimage.flatten()
+#     # optimizer.zero_grad()
+
+#     # print(testimage.shape)
+#     # print(testimage)
+
+
+#     testimageTensor= torch.tensor(testimage)
+#     testimageTensor=testimageTensor.to(torch.float32)
+        
+    
+
+#     intermediateOutput=inputLayer(testimageTensor)
+#     intermediateOutput=torch.relu(intermediateOutput)
+#         #    print("Intermediate output: {}".format(intermediateOutput))
+
+#     finalOutput=hiddenLayer(intermediateOutput)
+
+#     outputsToPrint=finalOutput.detach().numpy()
+#     numpy.set_printoptions(suppress=True)
+#     # print("final output: {}".format(outputsToPrint))
+
+#     loss = nn.functional.cross_entropy(finalOutput,label)
+#     error+=loss
+#     # loss.backward()
+#     # optimizer.step()
+#     # print("loss:{}".format(loss))
+#     maxvalue,maxindex=torch.max(finalOutput,dim=0)
+#     print("guessing:{}".format(maxindex.item()))
+#         # print(maxindex.item())
+#         # plt.imshow(startimage,cmap='gray')
+#         # plt.axis('off')
+#         # plt.show()
+#     plt.imshow(startimage,'gray')
+#     plt.show(block=False)
+#     print("average loss:{}".format(error/i))
+    
+#     plt.pause(.5)
+#     plt.close
+
+
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+# # probabilities=probabilities.detach().numpy()
+# # numpy.set_printoptions(suppress=True)
+# # print(probabilities)
+
+
+
+
+
