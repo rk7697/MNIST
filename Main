@@ -88,7 +88,7 @@ labels = idx2numpy.convert_from_file('/Users/rk/desktop/archive/t10k-labels.idx1
 error=0
 
 from PIL import Image
-image_path = '/Users/rileyknutson/desktop/thing.png'
+image_path = '/Users/rk/desktop/thing.png'
 image = Image.open(image_path)
 image = image.resize((28, 28), Image.BILINEAR)
 image=image.convert('L')
