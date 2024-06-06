@@ -9,11 +9,11 @@ import pandas as pd
 from torch.utils.data import Dataset,DataLoader
 import numpy
 import idx2numpy
-rootdir='/Users/rk/desktop/MNIST'
-traindir='/Users/rk/desktop/MNIST/train.csv'
-testdir='/Users/rk/desktop/MNIST/test.csv'
-trainimages=[]
-trainlabels=[]
+###Directories
+rootdir='MNIST_ROOT_DIR'
+traindir='MNIST_ROOT_DIR/train.csv'
+testdir='MNIST_ROOT_DIR/test.csv'
+###
 predictions=[]
 device="mps" if torch.backends.mps.is_available() else "cpu"
 def resizeimages():
